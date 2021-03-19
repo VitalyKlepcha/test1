@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form action="/main" method="post">
+    <h1>Main page</h1>
+    <p>
+        <input name="text1" type="text" id="fline" th:value = "${leftInput}"/>
+        <button type="submit" value="Invert">Invert</button>
+        <input name="text2" type="text" id="sline" th:value = "${rightInput}"/>
+    </p>
+    <h1 th:text = "${error}"></h1>
+</form>
+<form action = "/database" method = "post">
+    <button type="submit" value="database">Show database</button>
+</form>
+</body>
+</html>
+

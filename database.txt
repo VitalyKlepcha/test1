@@ -1,0 +1,5 @@
+leftInput = abc/rightInput = cba
+Incorrect data
+Incorrect data
+leftInput = abcd/rightInput = 
+leftInput = /rightInput = dcbaasd
