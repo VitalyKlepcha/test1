@@ -1,9 +1,10 @@
 package com.example.test1.controller;
 
 import com.example.test1.exceptions.InputDataException;
+import com.example.test1.service.FileWorker;
 import com.example.test1.service.ReverseService;
 import com.example.test1.validator.Validator;
-import com.example.test1.FileWorker.FileWorker;
+import com.example.test1.service.impl.FileWorkerImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MainController {
-    FileWorker file=new FileWorker();
+    private static final String DATABASE = "D:\\test1\\database.txt";
+    private FileWorker fileWorker;
     private ReverseService reverseService;
     private static final Logger log = LogManager.getLogger();
+
     @Autowired
-    public MainController(final ReverseService reverseService) {
+    public MainController(FileWorker fileWorker, ReverseService reverseService) {
+        this.fileWorker = fileWorker;
         this.reverseService = reverseService;
     }
 
@@ -39,15 +43,15 @@ public class MainController {
     ) {
         Validator validator = new Validator();
         try{
-            validator.dataValidation(text1, text2);
-            file.write(text1, text2);
+            fileWorker.write(DATABASE, text1, text2);
             log.info("leftInput = " + text1 + '/' + "rightInput = " + text2);
+            validator.dataValidation(text1, text2);
             text2 = !text1.isEmpty() ? reverseService.reverse(text1) : text2;
             text1 = !text2.isEmpty() ? reverseService.reverse(text2) : text1;
         }
         catch(InputDataException ex){
             model.addAttribute("error", ex.getMessage());
-            file.write(ex.getMessage());
+            fileWorker.write(DATABASE, ex.getMessage());
             log.error(ex.getMessage());
         }
 
@@ -57,8 +61,7 @@ public class MainController {
     }
     @PostMapping("/database")
     public String database(Model model){
-        FileWorker file=new FileWorker();
-        model.addAttribute("data", file.read());
+        model.addAttribute("data", fileWorker.read(DATABASE));
         return "database";
     }
 }
