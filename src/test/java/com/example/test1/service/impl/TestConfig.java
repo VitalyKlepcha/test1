@@ -9,4 +9,8 @@ public class TestConfig {
     public FileWorkerImpl fileWorker() {
         return new FileWorkerImpl();
     }
+    @Bean
+    public ReverseServiceImpl reverseService() {
+        return new ReverseServiceImpl();
+    }
 }

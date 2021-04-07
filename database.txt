@@ -1,17 +1,14 @@
-leftInput = asd/rightInput = dsa
-Incorrect data
-leftInput = sdas/rightInput = 
-leftInput = /rightInput = sadsd
-leftInput = dsdas/rightInput = sadsd
-Incorrect data
-leftInput = dsdas/rightInput = sadsd
-Incorrect data
-leftInput = dsdas/rightInput = sadsd
-Incorrect data
-leftInput = /rightInput = 
-Incorrect data
-leftInput = /rightInput = 
-Incorrect data
-leftInput = abc/rightInput = 
-leftInput = abcsdfsdff/rightInput = cba
-Incorrect data
+ab ba
+abc cba
+asab basa
+abcd dcba
+abcd dcba
+dafs sfad
+sdfd dfds
+sdfd dfds
+asabd dbasa
+asabd dbasa
+asdasd dsadsa
+aasdfd dfdsaa
+abcdsad dasdcba
+dasasdasd dsadsasad
