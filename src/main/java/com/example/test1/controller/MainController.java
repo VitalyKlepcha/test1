@@ -3,9 +3,10 @@ package com.example.test1.controller;
 import com.example.test1.exceptions.InputDataException;
 import com.example.test1.service.FileWorker;
 import com.example.test1.parametres.entityParametres;
+import com.example.test1.service.ListWorkerService;
 import com.example.test1.service.SortListService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.example.test1.threads.ErrorsOutputRunner;
+import com.example.test1.threads.ListOutputRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,13 +24,14 @@ public class MainController {
     private FileWorker fileWorker;
     private SortListService sortListService;
     private entityParametres entityParametres;
-    private static final Logger log = LogManager.getLogger();
     private ArrayList<entityParametres> list;
+    private ListWorkerService listWorkerService;
 
     @Autowired
-    public MainController(FileWorker fileWorker, SortListService sortListService) {
+    public MainController(FileWorker fileWorker, SortListService sortListService, ListWorkerService listWorkerService) {
         this.fileWorker = fileWorker;
         this.sortListService = sortListService;
+        this.listWorkerService = listWorkerService;
     }
 
     @GetMapping({"/", "/main"})
@@ -45,21 +47,12 @@ public class MainController {
             Model model
     ) {
         list = new ArrayList<>();
-        //sortListService = new SortListServiceImpl();
-        try {
-            fileWorker.read(DATABASE, list);
-        }
-        catch(InputDataException ex){
-            model.addAttribute("error", ex.getMessage());
-        }
         try{
             entityParametres = new entityParametres(text1, text2);
             entityParametres.Reverse();
-            list.add(entityParametres);
+            listWorkerService.AddObject(list, entityParametres);
             Thread listOutputThread = new Thread(new ListOutputRunner(list));
             listOutputThread.start();
-            list = sortListService.Sort(list);
-            fileWorker.write(DATABASE, list);
         }
         catch(InputDataException ex){
             model.addAttribute("error", ex.getMessage());
@@ -79,31 +72,3 @@ public class MainController {
     }
 }
 
-class ListOutputRunner implements Runnable{
-    private ArrayList<entityParametres> list;
-    ListOutputRunner(ArrayList<entityParametres> list){
-        this.list = list;
-    }
-
-    @Override
-    public void run(){
-        for(entityParametres el : list)
-            System.out.println(el.getFirstLine() + el.getSecondLine());
-    }
-}
-
-class ErrorsOutputRunner implements Runnable{
-    private static final String ERRORDATABASE = "D:\\test1\\errorDatabase.txt";
-    private FileWorker fileWorker;
-    private static final Logger log = LogManager.getLogger();
-
-    public ErrorsOutputRunner(FileWorker fileWorker) {
-        this.fileWorker = fileWorker;
-    }
-
-    @Override
-    public void run(){
-        String message = fileWorker.read(ERRORDATABASE);
-        log.info(message);
-    }
-}
