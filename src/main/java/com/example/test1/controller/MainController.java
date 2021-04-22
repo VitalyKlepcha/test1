@@ -4,6 +4,7 @@ import com.example.test1.exceptions.InputDataException;
 import com.example.test1.service.FileWorker;
 import com.example.test1.parametres.entityParametres;
 import com.example.test1.service.ListWorkerService;
+import com.example.test1.service.ReverseService;
 import com.example.test1.service.SortListService;
 import com.example.test1.threads.ErrorsOutputRunner;
 import com.example.test1.threads.ListOutputRunner;
@@ -51,7 +52,12 @@ public class MainController {
             entityParametres = new entityParametres(text1, text2);
             entityParametres.Reverse();
             listWorkerService.AddObject(list, entityParametres);
-            Thread listOutputThread = new Thread(new ListOutputRunner(list));
+            Runnable ListOutputRunner2 = () -> {
+                for (entityParametres el : list)
+                System.out.println(el.getFirstLine() + el.getSecondLine());
+            };
+            =
+            Thread listOutputThread = new Thread(ListOutputRunner2);
             listOutputThread.start();
         }
         catch(InputDataException ex){
